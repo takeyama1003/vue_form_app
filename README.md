@@ -11,11 +11,9 @@
 サーバー側の言語はphpを使用しています。
 
 【アンケート作成アプリ】
-
  [vue_form_app_demo＞](https://v9h1ss.net/take/stable/index.php)
 
 作成されたファイルで下記のようなフォームが作成可能となります。
-
  [アンケートデモ＞](https://help.ecai.jp/form/liff_basic1.2_r4e/)
 
 
