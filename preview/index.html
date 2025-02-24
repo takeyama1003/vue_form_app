@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>サイトタイトル</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Validation-Engine/2.6.4/validationEngine.jquery.min.css">
+	<link rel="stylesheet" href="css/loading.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="js/jquery.validationEngine.min.js"></script>
+	<script src="js/jquery.validationEngine-ja.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#form-name").validationEngine();
+		});
+		//loader
+		$(window).on('load', function () {
+			$("#loader").addClass('loaded');
+		});
+		$(function () {
+			setTimeout(function () {
+				$("#loader").fadeOut();
+			}, 5000);
+		});
+
+		//title設定
+		var contents = JSON.parse(localStorage.getItem('contents'));
+		document.title = contents[0].tabTitle;
+
+	</script>
+
+</head>
+
+<body>
+	<div id="loader">
+		<div class="line-scale">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	</div>
+
+	<div id="app">
+
+	<header>
+		<h1>{{tabTitle}}</h1>
+	</header>
+	
+	<div class="wrap">
+		
+		<section class="title">
+			<div v-if="contents[0].imagePath"><img :src="contents[0].imagePath" alt="アップロードされた画像"></div>
+			<h2>{{headerTitle}}</h2>
+			<p class="pre-line">{{headerText}}</p>
+		</section>
+
+		<form id="form-name" action="./complete.html" novalidate>
+
+
+<section class="q" v-for="(content, i) in contents"
+ :key="i" v-if="i > 0">
+ <!-- <input type="hidden" name="col_1_title" value="{{content.question}}"> -->
+ <div class="txt">
+	<h3 class="pre-line">{{content.question}}<span v-if="content.required">*</span></h3>
+	<ul class="note">
+		<li>{{content.microcopy}}</li>
+	</ul>
+</div>
+
+<!-- <ul class="col1" v-if="content.type == 'type-radio'"> -->
+<ul :class="content.columntype" v-if="content.type == 'type-radio'">
+	<li
+		v-for="(answer, index) in content.answer"
+		:key="index"
+	><label>
+		<input type="radio" v-bind:name="'col_' + i" :class="{'validate[required]' : content.required}" value="回答" data-prompt-position="topLeft">
+		<span>{{answer.label}}</span>
+	</label></li>
+</ul>
+
+<ul :class="content.columntype" v-if="content.type == 'type-checkbox'">
+	<li
+		v-for="(answer, index) in content.answer"
+		:key="index"
+	><label>
+		<input type="checkbox" v-bind:name="'col_' + i + '[]'" :class="{'validate[required]' : content.required}" value="回答" data-prompt-position="topLeft">
+		<span>{{answer.label}}</span>
+	</label></li>
+</ul>
+
+<div class="select" v-if="content.type == 'type-select'">
+	<select v-bind:name="'col_' + i" :class="{'validate[required]' : content.required}" data-prompt-position="topLeft">
+		<option value="">選択して下さい</option>
+		<option
+			v-for="(answer, index) in content.answer"
+			:key="index"
+		value="回答">{{answer.label}}</option>
+	</select>
+</div>
+
+<div v-if="content.type == 'type-text' && content.texttype == 'text'">
+	<input v-bind:type="content.texttype" v-bind:name="'col_' + i" :class="{'validate[required]' : content.required}" v-bind:placeholder="content.placeholder" data-prompt-position="topLeft">
+</div>
+<div v-if="content.type == 'type-text' && content.texttype == 'name'">
+	<input type="text" v-bind:name="'col_' + i + '_name'" :class="{'validate[required]' : content.required}" v-bind:placeholder="content.placeholder" data-prompt-position="topLeft">
+</div>
+<div v-if="content.type == 'type-text' && content.texttype == 'email'">
+	<input  v-bind:type="content.texttype" v-bind:name="'col_' + i + '_' + content.texttype" :class="{'validate[required,custom[email]]' : content.required, 
+	'validate[custom[email]]': !content.required}" v-bind:placeholder="content.placeholder" data-prompt-position="topLeft">
+</div>
+<div v-if="content.type == 'type-text' && content.texttype == 'tel'">
+	<input  v-bind:type="content.texttype" v-bind:name="'col_' + i + '_' + content.texttype" :class="{'validate[required,custom[number],minSize[10],maxSize[11]]' : content.required, 
+	'validate[custom[number],minSize[10],maxSize[11]]': !content.required}" v-bind:placeholder="content.placeholder" data-prompt-position="topLeft">
+</div>
+
+
+<div v-if="content.type == 'type-textarea'">
+	<textarea v-bind:name="'col_' + i" :class="{'validate[required]' : content.required}" v-bind:placeholder="content.placeholder" style="font-size: 16px;"  data-prompt-position="topLeft"></textarea>
+</div>
+
+</section>
+
+			<ul class="btn entry">
+				<li>
+					<button type="submit" class="btn-submit">{{sendBtnText}}</button>
+				</li>
+			</ul>
+			<div class="loading" style="border: none;"><img src="./images/loading.gif"></div>
+		</form>
+	</div>
+
+</div><!-- /#app -->
+
+	<footer><img src="images/logo.png" alt="ECAI"></footer>
+
+
+	<!-- 削除禁止 -->
+	<!-- <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+	<script src="liff-starter.js"></script>
+	<script>
+		window.onload = function (e) {
+			liff.init({
+					liffId: "###liffid###"
+				}).then(() => {
+					liff.getProfile().then(function (profile) {
+						document.getElementById('useridfield').value = profile.userId;
+					}).catch(function (error) {});
+				})
+				.catch((err) => {});
+		};
+	</script> -->
+	<!-- 削除禁止 -->
+
+	<script>
+		//送信時処理
+		$(function () {
+			$('.btn-submit').on('click', function () {
+				//連打防止ローディング
+				if ($("#form-name").validationEngine('validate')) {
+					$('.btn').hide();
+					$('.loading').show();
+				}
+				//return false;
+			});
+		});
+	</script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>
