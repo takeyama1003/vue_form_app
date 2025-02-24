@@ -11,10 +11,12 @@
 サーバー側の言語はphpを使用しています。
 
 【アンケート作成アプリ】
- [vue_form_app_demo＞](https://v9h1ss.net/take/stable/index.php)"vue_form_app_demo"
+
+ [vue_form_app_demo＞](https://v9h1ss.net/take/stable/index.php)
 
 作成されたファイルで下記のようなフォームが作成可能となります。
- [アンケートデモ＞](https://help.ecai.jp/form/liff_basic1.2_r4e/)"アンケートデモ"
+
+ [アンケートデモ＞](https://help.ecai.jp/form/liff_basic1.2_r4e/)
 
 
 Vue2のCDNを使用して構築しておりますが、現在Vue３に変更してプロジェクト型の構成に変更中
